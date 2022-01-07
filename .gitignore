@@ -1,0 +1,8 @@
+*.cmake
+CMakeFiles/
+CMakeCache.txt
+Makefile
+bin/
+*.csv
+.cmake/
+compile_commands.json
