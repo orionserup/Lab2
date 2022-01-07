@@ -6,3 +6,4 @@ bin/
 *.csv
 .cmake/
 compile_commands.json
+*.png
