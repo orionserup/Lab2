@@ -53,13 +53,13 @@ void BenchmarkSorts(const Sort* const sorts, const size_t numsorts) {
         strcat(buffer, sort.name);        
 
         strcpy(buffer + offset, "Best.csv");
-        FILE* best = fopen(buffer, "a");
+        FILE* best = fopen(buffer, "w");
 
         strcpy(buffer + offset, "Worst.csv");
-        FILE* worst = fopen(buffer, "a");
+        FILE* worst = fopen(buffer, "w");
 
         strcpy(buffer + offset, "Ave.csv");
-        FILE* ave = fopen(buffer, "a");
+        FILE* ave = fopen(buffer, "w");
 
         for(size_t i = 0; i < num_trials; i++) {
 
@@ -90,7 +90,7 @@ SortData TimeSort(int* (*Sort)(int* const array, const size_t size), int* const 
     Sort(array, size);
     clock_t end = clock();
 
-    return (SortData){ .time_ms = (double)(end - begin)*1000/CLOCKS_PER_SEC, .n = size };
+    return (SortData){ .time_ms = (double)(end - begin)*1000.0f/CLOCKS_PER_SEC, .n = size };
 
 }
 
