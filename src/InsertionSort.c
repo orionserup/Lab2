@@ -23,7 +23,7 @@ int* InsertionSort(int* const array, const size_t size) {
 
         val = array[i];
 
-        for(j = i - 1; array[j] < val && j != SIZE_MAX; j--) 
+        for(j = i - 1; (array[j] > val) && (j != SIZE_MAX); j--) 
             array[j + 1] = array[j];                   
 
         array[j + 1] = val;

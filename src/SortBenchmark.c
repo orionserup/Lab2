@@ -15,8 +15,6 @@
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#include <omp.h>
-
 
 void WriteSortDataToFile(FILE* const file, const SortData* const times, const size_t size);
 
@@ -28,8 +26,8 @@ static const size_t n[] = {
 
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
     10, 20, 30, 40, 50, 60, 70, 80, 90,
-    100, 200, 300, 400, 500, 600, 700, 800, 900, 
-    1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 
+    100, 200, 300, 400, 500, 600, 700, 800, 900,
+    1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,
     10000, 20000, 30000, 40000, 50000, 60000, 7000, 80000, 90000
 
 };
@@ -55,13 +53,13 @@ void BenchmarkSorts(const Sort* const sorts, const size_t numsorts) {
         strcat(buffer, sort.name);        
 
         strcpy(buffer + offset, "Best.csv");
-        FILE* best = fopen(buffer, "w");
+        FILE* best = fopen(buffer, "a");
 
         strcpy(buffer + offset, "Worst.csv");
-        FILE* worst = fopen(buffer, "w");
+        FILE* worst = fopen(buffer, "a");
 
         strcpy(buffer + offset, "Ave.csv");
-        FILE* ave = fopen(buffer, "w");
+        FILE* ave = fopen(buffer, "a");
 
         for(size_t i = 0; i < num_trials; i++) {
 
@@ -79,7 +77,7 @@ void BenchmarkSorts(const Sort* const sorts, const size_t numsorts) {
         fclose(best);
         fclose(worst);
 
-    }
+   }
 }
 
 /// Times a Sort and Returns a Struct with the time and N
@@ -108,10 +106,10 @@ void WriteSortDataToFile(FILE* const file, const SortData* const times, const si
 
 SortData TestBestCase(const Sort* const sort, const size_t n) {
 
-    assert(sort         || !fprintf(stderr, "Invalid Sort Pointer in Best Case Test"));
-    assert(sort->Sort   || !fprintf(stderr, "Invalid Sort Function Pointer in Best Case Test"));
+    assert(sort       || !fprintf(stderr, "Invalid Sort Pointer in Best Case Test"));
+    assert(sort->Sort || !fprintf(stderr, "Invalid Sort Function Pointer in Best Case Test"));
 
-    int array[n];
+    int array[n + 1];
     for(int i = 0; i < (int)n; i++)
         array[i] = INT32_MIN + i;
     
@@ -124,7 +122,7 @@ SortData TestWorstCase(const Sort* const sort, const size_t n) {
     assert(sort       || !fprintf(stderr, "Invalid Sort Pointer in Worst Case Test"));
     assert(sort->Sort || !fprintf(stderr, "Invalid Sort Function Pointer in Worst Case Test"));
 
-    int array[n];
+    int array[n + 1];
     for(int i = 0; i < (int)n; i++)
         array[i] = INT32_MAX - i;
     
@@ -139,8 +137,8 @@ SortData TestAverageCase(const Sort* const sort, const size_t n) {
     
     srand(clock());
 
-    int array[n];
-    for(int i = 0; i < (int)n; i++)
+    int array[n + 1];
+    for(size_t i = 0; i < n; i++)
         array[i] = rand();
 
     return TimeSort(sort->Sort, array, n);

@@ -13,10 +13,6 @@
 #include "InsertionSort.h"
 #include "SortBenchmark.h"
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 /**
  * @brief 
  * 
@@ -27,8 +23,9 @@ int main() {
     Sort Selection = { .Sort = SelectionSort, .name = "SelectionSort"};
     Sort Insertion = { .Sort = InsertionSort, .name = "InsertionSort"};
 
-    Sort sorts[] = { Selection, Insertion };
+    const Sort sorts[] = { Selection, Insertion };
+    const size_t numsorts = 2;
 
-    BenchmarkSorts(sorts, 2);
+    BenchmarkSorts(sorts, numsorts);
 
 }
