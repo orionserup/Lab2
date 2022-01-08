@@ -14,7 +14,7 @@ if __name__ == "__main__":
     plt.xlabel("Number Of Elements")
     plt.ylabel("Time To Sort (ms)");
     for i in range(len(xdata)):
-        plt.title(files[i].split(".csv")[0])
+        plt.title(files[i].split(".csv")[0].replace(path, ''))
         plt.plot(xdata[i], ydata[i])
         plt.savefig(files[i].split(".csv")[0] + ".png")
         plt.close()
