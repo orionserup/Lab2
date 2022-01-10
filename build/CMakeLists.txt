@@ -1,18 +1,27 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 
-project(Lab2)
+project(Lab2 VERSION 1.0)
 
 file(GLOB SOURCES ../src/*.c)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
-
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_C_STANDARD_REQUIRED True)
-
-set(CMAKE_C_FLAGS "-Wall -Wextra")
-set(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -Ofast -march=native -mtune=native -fprofile-generate")
-set(CMAKE_C_FLAGS_DEBUG "-Og -g -DDEBUG")
-
 add_executable(${PROJECT_NAME} ${SOURCES})
-
 target_include_directories(${PROJECT_NAME} PUBLIC ../include)
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+
+if(MSVC)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        COMPILE_FLAGS "/W4"
+        COMILE_FLAGS_DEBUG "/DEBUG /DDEBUG /D_DEBUG /Od"
+        COMPILE_FLAGS_RELEASE "/Ox /GL /LTCG"
+    )
+else()
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        COMPILE_FLAGS "-Wall -Wextra -pedantic"
+        COMPILE_FLAGS_DEBUG "-DDEBUG -Og -g"
+        COMPILE_FLAGS_RELEASE "-flto -DNDEBUG -Ofast -mtune=native -march=native"
+    )
+endif()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+                      RUNTIME_OUTPUT_DIRECTORY ../bin)
