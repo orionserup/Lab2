@@ -20,6 +20,7 @@ else()
         COMPILE_FLAGS "-Wall -Wextra -pedantic"
         COMPILE_FLAGS_DEBUG "-DDEBUG -Og -g"
         COMPILE_FLAGS_RELEASE "-flto -DNDEBUG -Ofast -mtune=native -march=native"
+        LINK_FLAGS "-pie"
     )
 endif()
 
