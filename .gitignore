@@ -8,3 +8,5 @@ bin/
 compile_commands.json
 *.png
 *.ninja*
+html/
+latex/
