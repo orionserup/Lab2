@@ -11,16 +11,14 @@
 
 #include "RadixSort.h"
 
-/// The Radix is this power of 2, so for ex 8 -> 256
-#define RADIX_POW 3
 /// The Actual Radix (aka The Number we are taking the remainder of for the Sort) 
 static const size_t RADIX = (1 << RADIX_POW);
 
 /// Finds the Number of Counting Sort Iterations Needed to Sort the Number Max
-static inline size_t FindNumIterations(int max);
+static inline size_t FindNumIterations(Data max);
 
 /// Performs the Super Fast Base 2 Based Radix Sort
-int* RadixSort(int* const array, const size_t size) {
+Data* RadixSort(Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array In Radix Sort"); // We have to have a valid array to sort
 
@@ -47,16 +45,16 @@ int* RadixSort(int* const array, const size_t size) {
 }
 
 /// Performs the Optimized Base 2 Based Counting Sort
-int* CountingSort(int* const array, const size_t size, const size_t place) {
+Data* CountingSort(Data* const array, const size_t size, const size_t place) {
 
     // If the Array is NULL or the we will be searching past what is an integer then print the 
     // message to the error console and then break the Program
     Assert(array, "Invalid Array in Counting Sort");
-    Assert(place * RADIX_POW <= 32, "Place is Too Large in Counting Sort");
+    Assert(place * RADIX_POW <= 8 * sizeof(Data), "Place is Too Large in Counting Sort");
     
     // Array to store the number of numbers that have the digit cooresponding to the index of the array 
     size_t count[RADIX]; 
-    int out[size]; // copy of the input array that we can manipulate
+    Data out[size]; // copy of the input array that we can manipulate
 
     memset(count, 0, sizeof(count));  // set the count array to zero so that we make sure we get the correct values
 
@@ -89,7 +87,7 @@ int* CountingSort(int* const array, const size_t size, const size_t place) {
  * \param  max: Number to Check
  * \retval size_t : The Number of iterations Needed
  */
-size_t FindNumIterations(int max) {
+size_t FindNumIterations(Data max) {
 
     size_t i = 0;
 

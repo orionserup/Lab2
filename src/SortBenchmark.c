@@ -10,83 +10,69 @@
  */
 
 #include "SortBenchmark.h"
+#include <omp.h>
 
 // Writes an Array of SortData to a File
 static void WriteSortDataToFile(FILE* const file, const SortData* const times, const size_t size);
 
-/**
- * \brief All of The Test Cases for the Benchmark
- * 
- */
-static const size_t n[] = {
-
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-    10, 20, 30, 40, 50, 60, 70, 80, 90, 
-    100, 200, 300, 400, 500, 600, 700, 800, 900,
-    1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000
-
-};
-/// The Number of Cases we will be running
-static const size_t num_trials = sizeof(n)/sizeof(n[0]);
-
 // Benchmarks all all of the sorts in an array a number of times 
-void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const size_t numtimes) {
+void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials) {
 
-    SortData besttimes[num_trials];  // arrays to store the sorting results
-    SortData worsttimes[num_trials];
-    SortData avetimes[num_trials];
+    #pragma omp parallel for    
+    for(size_t sortnum = 0; sortnum < numsorts; sortnum++)
+        BenchmarkSort(sorts[sortnum], trials, numtrials);
 
-    char buffer[100];  // Buffer for creating the file name
+}
 
-    for(size_t sortnum = 0; sortnum < numsorts; sortnum++) {
+void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials) {
 
-        Sort sort = sorts[sortnum];  // Get the nth Sort
+    Assert(sort.sort, "Invalid Sort Function in Sort Benchmark");
+    Assert(trials, "Invalid Trials Array In Sort Benchmark");
+    Assert(Max(trials, numtrials) <= maxof(Data), "Trials are beyond the size of the data in Sort Benchmark");
 
-        char* prefix = "../data/";
-        size_t offset = strlen(prefix) + strlen(sort.name);
+    SortData besttimes[numtrials];  // arrays to store the sorting results
+    SortData worsttimes[numtrials];
+    SortData avetimes[numtrials];
 
-        strcpy(buffer, prefix); // copy the path to the buffer
-        strcat(buffer, sort.name); // add the Sort Name to the Name       
+    char buffer[100];
 
-        strcpy(buffer + offset, "Best.csv"); // Add Best for the Best Case Data
-        FILE* best = fopen(buffer, "w"); // Open the Best Case Data File
+    const char* const path = "../data/";
+    size_t offset = strlen(path) + strlen(sort.name);
 
-        // repeat for Worst and Average Case
-        strcpy(buffer + offset, "Worst.csv");
-        FILE* worst = fopen(buffer, "w");
+    strcpy(buffer, path); // copy the path to the buffer
+    strcat(buffer, sort.name); // add the Sort Name to the Name       
 
-        strcpy(buffer + offset, "Ave.csv");
-        FILE* ave = fopen(buffer, "w");
+    strcpy(buffer + offset, "Best.csv"); // Add Best for the Best Case Data
+    FILE* best = fopen(buffer, "w"); // Open the Best Case Data File
 
-        // Repeat numtimes times
-        for(size_t times = 1; times <= numtimes; times++) {
+    // repeat for Worst and Average Case
+    strcpy(buffer + offset, "Worst.csv");
+    FILE* worst = fopen(buffer, "w");
 
-            // for every value in n we get the best, worst and average case time
-            for(size_t i = 0; i < num_trials; i++) {
+    strcpy(buffer + offset, "Avg.csv");
+    FILE* ave = fopen(buffer, "w");
 
-                worsttimes[i] = TestWorstCase(&sort, n[i]);
-                besttimes[i] = TestBestCase(&sort, n[i]);
-                avetimes[i] = TestAverageCase(&sort, n[i]);
+    #pragma omp parallel for
+    for(size_t i = 0; i < numtrials; i++) {
 
-            }
+        besttimes[i] = TestBestCase(&sort, trials[i]);
+        worsttimes[i] = TestWorstCase(&sort, trials[i]);
+        avetimes[i] = TestAverageCase(&sort, trials[i]);
 
-            // Write All of the Data to their respective files
-            WriteSortDataToFile(best, besttimes, num_trials);
-            WriteSortDataToFile(worst, worsttimes, num_trials);
-            WriteSortDataToFile(ave, avetimes, num_trials);
-        
-        }
-        
-        // Close all of the Files
-        fclose(ave);
-        fclose(best);
-        fclose(worst);
+    }
 
-   }
+    WriteSortDataToFile(best, besttimes, numtrials);
+    WriteSortDataToFile(worst, worsttimes, numtrials);
+    WriteSortDataToFile(ave, avetimes, numtrials);
+
+    fclose(best);
+    fclose(worst);
+    fclose(ave);
+
 }
 
 /// Times a Sort and Returns a Struct with the time and N
-SortData TimeSort(int* (*Sort)(int* const array, const size_t size), int* const array, const size_t size) {
+SortData TimeSort(Data* (*const Sort)(Data* const array, const size_t size), Data* const array, const size_t size) {
 
     Assert(Sort, "Invalid Sort Function in Time Sort"); // we need a valid array and sort to time it
     Assert(array, "Invalid Testing Array in Time Sort");
@@ -119,8 +105,8 @@ SortData TestBestCase(const Sort* const sort, const size_t n) {
     Assert(sort, "Invalid Sort Pointer in Best Case Test");
     Assert(sort->sort, "Invalid Sort Function Pointer in Best Case Test");
 
-    int array[n + 1]; // Create your array big enough so there is no memory issue
-    for(int i = 0; i < (int)n; i++) 
+    Data array[n + 1]; // Create your array big enough so there is no memory issue
+    for(Data i = 0; i < (Data)n; i++) 
         array[i] = i;  // fill the array from 0 to n
     
     return TimeSort(sort->sort, array, n); // Time the Sort and return the results
@@ -133,9 +119,9 @@ SortData TestWorstCase(const Sort* const sort, const size_t n) {
     Assert(sort, "Invalid Sort Pointer in Worst Case Test");
     Assert(sort->sort, "Invalid Sort Function Pointer in Worst Case Test");
 
-    int array[n + 1]; // create testing array
-    for(int i = 0; i < (int)n; i++)
-        array[i] = INT32_MAX - i; // fill the array from INT_MAX to INT_MAX - n
+    Data array[n + 1]; // create testing array
+    for(Data i = 0; i < n; i++)
+        array[i] = maxof(Data) - i; // fill the array from INT_MAX to INT_MAX - n
     
     return TimeSort(sort->sort, array, n); // return the Timing Result
 
@@ -149,9 +135,9 @@ SortData TestAverageCase(const Sort* const sort, const size_t n) {
     
     srand(clock()); // seed the random generator 
 
-    int array[n + 1];
+    Data array[n + 1];
     for(size_t i = 0; i < n; i++)
-        array[i] = rand();  // fill the array with n random numbers
+        array[i] = rand() & maxof(Data);  // fill the array with n random numbers
 
     return TimeSort(sort->sort, array, n); // Time the Sort and Return the Result
 

@@ -19,9 +19,11 @@
  * 
  * \param array: The Array to Sort
  * \param size: The Size of the Array
- * \return int*, The Sorted Array
+ * \return Data*, The Sorted Array
  */
-int* SelectionSort(int* const array, const size_t size);
+Data* SelectionSort(Data* const array, const size_t size);
 
+/// Global Sort Definition for Selection Sort
+static const Sort Selection = { .sort = SelectionSort, .name = "SelectionSort" };
 
 #endif

@@ -21,6 +21,8 @@
  * \param  size: 
  * \retval 
  */
-int* HeapSort(int* const array, const size_t size);
+Data* HeapSort(Data* const array, const size_t size);
+
+static const Sort Heap = { .sort = HeapSort, .name = "HeapSort" };
 
 #endif

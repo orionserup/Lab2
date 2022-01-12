@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef QUICK_SORT
+#define QUICK_SORT
+
 #include "SortUtils.h"
 
 /**
@@ -16,6 +19,11 @@
  * 
  * \param array: Array to Sort
  * \param size: Size of the Array
- * \return int*: The Array Back, Sorted
+ * \return Data*: The Array Back, Sorted
  */
-int* QuickSort(int* const array, const size_t size);
+Data* QuickSort(Data* const array, const size_t size);
+
+/// Global Sort Definition For Quick Sort
+static const Sort Quick = { .sort = QuickSort, .name = "QuickSort" };
+
+#endif

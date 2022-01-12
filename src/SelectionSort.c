@@ -11,7 +11,7 @@
 
 #include "SelectionSort.h"
 
-int* SelectionSort(int* const array, const size_t size) {
+Data* SelectionSort(Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array in Selection Sort");
 

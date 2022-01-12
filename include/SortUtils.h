@@ -8,6 +8,8 @@
  * \copyright Copyright (c) 2022
  * 
  */
+#ifndef SORT_UTILS
+#define SORT_UTILS
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -17,6 +19,19 @@
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
+#include <stddef.h>
+
+#include "SortParams.h"
+
+#define issigned(t) (((t)(-1)) < ((t) 0))
+
+#define umaxof(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | \
+                    (0xFULL << ((sizeof(t) * 8ULL) - 4ULL)))
+
+#define smaxof(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | \
+                    (0x7ULL << ((sizeof(t) * 8ULL) - 4ULL)))
+
+#define maxof(t) ((unsigned long long) (issigned(t) ? smaxof(t) : umaxof(t)))
 
 // Fancy Assert For Much Easier Debug, Prints Custom Message, Line Number and File Name in Red
 #ifdef __unix__
@@ -28,13 +43,24 @@
 #endif
 
 /**
+ * \brief A Structure to Represent a Sorting Algorithm For Easier Handling and Benchmarking
+ * 
+ */
+typedef struct {
+
+    Data* (*const sort)(Data* const array, const size_t size); ///< Function Pointer To the Actual Sort
+    const char* const name;   ///< The name of the Sort
+
+} Sort;
+
+/**
  * \brief Finds the maximum value of the array
  * 
  * \param array: Array to look Through
  * \param size: Size of the of the Array
  * \return int: The Maximum Value
  */
-int Max(const int* const array, const size_t size);
+Data Max(const Data* const array, const size_t size);
 
 /**
  * \brief 
@@ -44,7 +70,7 @@ int Max(const int* const array, const size_t size);
  * \return true If the Array IS Sorted 
  * \return false If the Array IS NOT Sorted
  */
-bool IsSorted(const int* const array, const size_t size);
+bool IsSorted(const Data* const array, const size_t size);
 
 /**
  * \brief Finds the Index of the Smallest Value in the Array
@@ -53,7 +79,7 @@ bool IsSorted(const int* const array, const size_t size);
  * \param size: The Size of the Array
  * \return size_t: The Index With the Minimum Value In the Array 
  */
-size_t FindMin(const int* const array, const size_t size);
+size_t FindMin(const Data* const array, const size_t size);
 
 /**
  * \brief Swaps the values at the Two Given Pointers
@@ -61,7 +87,7 @@ size_t FindMin(const int* const array, const size_t size);
  * \param val1: The First Value
  * \param val2: The Second Value
  */
-void Swap(int* const val1, int* const val2);
+void Swap(Data* const val1, Data* const val2);
 
 /**
  * \brief  Prints an Array to a File
@@ -70,8 +96,10 @@ void Swap(int* const val1, int* const val2);
  * \param  size: Size of the Array
  * \retval None
  */
-void fPrintArray(FILE* const file, const int* const array, const size_t size);
+void fPrintArray(FILE* const file, const Data* const array, const size_t size);
 
 /// A Special Case to Print to the Standard output
 #define PrintArray(array, size) (fPrintArray(stdout, array, size))
+
+#endif
 

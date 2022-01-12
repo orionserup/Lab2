@@ -26,17 +26,6 @@ typedef struct {
 } SortData;
 
 /**
- * \brief A Structure to Represent a Sorting Algorithm For Easier Handling and Benchmarking
- * 
- */
-typedef struct {
-
-    int* (*sort)(int* const array, const size_t size); ///< Function Pointer To the Actual Sort
-    const char* name;   ///< The name of the Sort
-
-} Sort;
-
-/**
  * \brief Times the Sort Given the Parameters 
  * 
  * \param Sort: Sort Function to Time 
@@ -44,23 +33,32 @@ typedef struct {
  * \param size: Size of the Array to Feed the Sorter
  * \return SortData: Time to sort in Seconds and the number of elements, n
  */
-SortData TimeSort(int* (*Sort)(int* const array, const size_t size), int* const array, const size_t size);
+SortData TimeSort(Data* (*Sort)(Data* const array, const size_t size), Data* const array, const size_t size);
 
-/**
+/** 
  * \brief Benchmarks Every Sort in an Array A Given Number of times 
  * 
- * Takes Every Sort and runs it's Best, Worst, and Average Case. The Number of Elements is defined in
- * an Array in SortBenchmark.c and is called n, you can change this to change the number of elements tested.
+ * Takes a Sort and runs it's Best, Worst, and Average Case for every n defined in trials
  * 
- * The Benchmark wil then generate CSV files with every Sort's data for the Best, Worst, and Average Case. These will
- * be labelled as ${sort.name}[Best, Ave, Worst].csv. The Data can be graphed using the python utility script in the 
+ * The Benchmark wil then generate CSV files with data for the Best, Worst, and Average Case. These will
+ * be labelled as ${sort.name}[Best, Avg, Worst].csv. The Data can be graphed using the python utility script in the 
  * tools folder. It will generate a .png Graph for every .csv File and put it in the same directory 
  * 
- * \param sorts: An Array of Sort Objects to Benchmark
- * \param numsorts: The Number of Sorts to Benchmark
- * \param numtimes: The Number of Times to Benchmark the Sort, Adds all of the Data to One File
+ * \param sort: The Sort To Benchmark
+ * \param trials: An Array of values of N to Test the sort with
+ * \param numtrials: The Number of Times to Benchmark the Sort, Adds all of the Data to One File
  */
-void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const size_t numtimes);
+void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials);
+
+/**
+ * \brief 
+ * 
+ * \param sorts
+ * \param numsorts
+ * \param trials
+ * \param numtrials
+ */
+void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials);
 
 /**
  * \brief  Times the Given Sort for When the Array is Already sorted
@@ -88,6 +86,5 @@ SortData TestWorstCase(const Sort* const sort, const size_t n);
  * \retval SortData: How Long it took and how many elements were processed
  */
 SortData TestAverageCase(const Sort* const sort, const size_t n);
-
 
 #endif

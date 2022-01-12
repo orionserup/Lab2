@@ -37,11 +37,7 @@
  *  
  */
 
-#include "SelectionSort.h"
-#include "InsertionSort.h"
-#include "RadixSort.h"
-#include "HeapSort.h"
-#include "QuickSort.h"
+#include "Sorts.h"
 #include "SortBenchmark.h"
 
 /**
@@ -51,15 +47,17 @@
  */
 int main() {
 
-    Sort Selection = { .sort = SelectionSort, .name = "SelectionSort"};
-    Sort Insertion = { .sort = InsertionSort, .name = "InsertionSort"};
-    Sort Heap = { .sort = HeapSort, .name = "HeapSort"}; 
-    Sort Radix = { .sort = RadixSort, .name = "RadixSort"};
-    Sort Quick = { .sort = QuickSort, .name = "QuickSort"};
+    ///The Sorts to Test
+    const Sort sorts[] = { Selection, Insertion, Radix };
 
-    const Sort sorts[] = { Radix, Insertion, Selection, Quick, Heap };
-    const size_t numsorts = sizeof(sorts)/sizeof(sorts[0]);
+    Data n[UINT16_MAX/16];
 
-    BenchmarkSorts(sorts, numsorts, 1);
+    for(Data i = 0; i < UINT16_MAX/16; i++)
+        n[i] = i*16;
+
+    Assert(Max(n, sizeof(n) / 8) < maxof(Data), "You cannot Test Best and Worse");
+
+    BenchmarkSorts(sorts, 3, n, sizeof(n)/sizeof(n[0]));
 
 }
+

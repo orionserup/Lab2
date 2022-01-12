@@ -18,8 +18,11 @@
  * 
  * \param array: The Array to Sort
  * \param size: The Size of the Array
- * \return int*: The Array Back 
+ * \return Data*: The Array Back 
  */
-int* InsertionSort(int* const array, const size_t size);
+Data* InsertionSort(Data* const array, const size_t size);
+
+/// Our Global Insertion Sort Object
+static const Sort Insertion = { .sort = InsertionSort, .name = "InsertionSort" };
 
 #endif

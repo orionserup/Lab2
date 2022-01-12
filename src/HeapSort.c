@@ -12,10 +12,11 @@
 
 
 /// Sorts Using Heap Sort
-int* HeapSort(int* const array, const size_t size) {
+Data* HeapSort(Data* const array, const size_t size) {
 
 
-    
+    if(size < 2) return array;
+    return array;
 
 
 }

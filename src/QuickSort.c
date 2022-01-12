@@ -11,9 +11,8 @@
 
 #include "QuickSort.h"
 
-int* QuickSort(int* const array, const size_t size) {
+Data* QuickSort(Data* const array, const size_t size) {
 
-
-
+    if(size < 2) return array;
     return array;
 }

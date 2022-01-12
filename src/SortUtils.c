@@ -12,14 +12,14 @@
 #include "SortUtils.h"
 
 // Finds the maximum value of the array
-int Max(const int* const array, const size_t size) {
+Data Max(const Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array in Find Max");
 
-    if(size == 0) return INT32_MIN; // If there are no elements there is no max
+    if(size == 0) return (Data)INT64_MIN; // If there are no elements there is no max
     else if(size == 1) return array[0];  // if there is only one element then its the first
     
-    int max = array[0]; // we choose the max t be the first element to start with
+    Data max = array[0]; // we choose the max t be the first element to start with
     for(size_t i = 1; i < size; i++) // we go through the array
         if(array[i] > max) // if an element is bigger than the max it becomes the max
             max = array[i];
@@ -29,7 +29,7 @@ int Max(const int* const array, const size_t size) {
 }
 
 // Swaps the values pointed at
-void Swap(int* const val1, int* const val2) {
+void Swap(Data* const val1, Data* const val2) {
 
     Assert(val1, "Invalid First Value Pointer in Swap");
     Assert(val2, "Invalid Second Value Pointer in Swap");
@@ -43,7 +43,7 @@ void Swap(int* const val1, int* const val2) {
 }
 
 // Gets the Index of the Smallest Element
-size_t FindMin(const int* const array, const size_t size) {
+size_t FindMin(const Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array In Find MinValue");
 
@@ -59,18 +59,18 @@ size_t FindMin(const int* const array, const size_t size) {
 }
 
 // Prints the Array to a file
-void fPrintArray(FILE* const file, const int* const array, const size_t size) {
+void fPrintArray(FILE* const file, const Data* const array, const size_t size) {
 
     Assert(file, "Invalid file pointer in fPrintArray");
     Assert(array, "Invalid array in fPrintArray");
 
     for(size_t i = 0; i < size || !fputs("\n", file); i++)  // Goes through the whole array, it it hits the end, place a new line
-        fprintf(file, "%d ", array[i]); // Print Each element to the file
+        fprintf(file, "%ld ", (int64_t)array[i]); // Print Each element to the file
 
 }
 
 // Checks if an array is sorted
-bool IsSorted(const int* const array, const size_t size) {
+bool IsSorted(const Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array in IsSorted");
 

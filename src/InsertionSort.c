@@ -10,9 +10,9 @@
  */
 #include "InsertionSort.h"
 
-int* InsertionSort(int* const array, const size_t size) {
+Data* InsertionSort(Data* const array, const size_t size) {
     // If there is a Print the Message and Break the Program
-    assert(array || !fprintf(stderr, "Invalid Array In the Insertion Sort")); 
+    Assert(array, "Invalid Array In the Insertion Sort"); 
 
     if(size < 2) return array; // if there are one or zero elements then return the array, it is sorted
 
@@ -20,7 +20,7 @@ int* InsertionSort(int* const array, const size_t size) {
     PrintArray(array, size);
     #endif
 
-    int val; // Store a temporary to store the current value
+    Data val; // Store a temporary to store the current value
     for(size_t j, i = 1; i < size; i++) { // Go through every element starting from the second
 
         val = array[i]; // store the element at that index
