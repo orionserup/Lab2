@@ -48,7 +48,7 @@
 int main() {
 
     ///The Sorts to Test
-    const Sort sorts[] = { Selection, Insertion, Radix };
+    const Sort sorts[] = { SELECTION_SORT, INSERTION_SORT, RADIX_SORT };
 
     Data n[UINT16_MAX/16];
 

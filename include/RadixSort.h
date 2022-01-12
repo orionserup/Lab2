@@ -10,7 +10,6 @@
  */
 
 #ifndef RADIX_SORT
-#define RADIX_SORT
 
 #include "SortUtils.h"
 
@@ -39,6 +38,6 @@ Data* RadixSort(Data* const array, const size_t size);
 Data* CountingSort(Data* const array, const size_t size, const size_t place);
 
 /// Global Sort Definition for Radix Sort 
-static const Sort Radix = { .sort = RadixSort, .name = "RadixSort" };
+#define RADIX_SORT (Sort){ .sort = RadixSort, .name = "RadixSort" }
 
 #endif

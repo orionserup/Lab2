@@ -30,9 +30,11 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     Assert(trials, "Invalid Trials Array In Sort Benchmark");
     Assert(Max(trials, numtrials) <= maxof(Data), "Trials are beyond the size of the data in Sort Benchmark");
 
-    SortData besttimes[numtrials];  // arrays to store the sorting results
-    SortData worsttimes[numtrials];
-    SortData avetimes[numtrials];
+    if(numtrials == 0) return;
+
+    SortData* besttimes = malloc(numtrials * sizeof(SortData));  // arrays to store the sorting results
+    SortData* worsttimes = malloc(numtrials * sizeof(SortData));
+    SortData* avetimes = malloc(numtrials * sizeof(SortData));
 
     char buffer[100];
 
@@ -52,7 +54,7 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     strcpy(buffer + offset, "Avg.csv");
     FILE* ave = fopen(buffer, "w");
 
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for(size_t i = 0; i < numtrials; i++) {
 
         besttimes[i] = TestBestCase(&sort, trials[i]);
@@ -64,6 +66,10 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     WriteSortDataToFile(best, besttimes, numtrials);
     WriteSortDataToFile(worst, worsttimes, numtrials);
     WriteSortDataToFile(ave, avetimes, numtrials);
+
+    free(besttimes);
+    free(worsttimes);
+    free(avetimes);
 
     fclose(best);
     fclose(worst);

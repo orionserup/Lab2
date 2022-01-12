@@ -51,6 +51,8 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
     // message to the error console and then break the Program
     Assert(array, "Invalid Array in Counting Sort");
     Assert(place * RADIX_POW <= 8 * sizeof(Data), "Place is Too Large in Counting Sort");
+
+    if(size < 2) return array;
     
     // Array to store the number of numbers that have the digit cooresponding to the index of the array 
     size_t count[RADIX]; 

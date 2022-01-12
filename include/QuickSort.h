@@ -10,7 +10,6 @@
  */
 
 #ifndef QUICK_SORT
-#define QUICK_SORT
 
 #include "SortUtils.h"
 
@@ -23,7 +22,7 @@
  */
 Data* QuickSort(Data* const array, const size_t size);
 
-/// Global Sort Definition For Quick Sort
-static const Sort Quick = { .sort = QuickSort, .name = "QuickSort" };
+/// Global Sort Definition For Quick Sort 
+#define QUICK_SORT (Sort){ .sort = QuickSort, .name = "QuickSort" }
 
 #endif

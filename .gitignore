@@ -10,3 +10,8 @@ compile_commands.json
 *.ninja*
 html/
 latex/
+*.sln
+*.vcxproj
+*.filters
+x64/
+*.dir/

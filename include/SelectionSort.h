@@ -10,7 +10,6 @@
  */
 
 #ifndef SELECTION_SORT
-#define SELECTION_SORT
 
 #include "SortUtils.h"
 
@@ -24,6 +23,6 @@
 Data* SelectionSort(Data* const array, const size_t size);
 
 /// Global Sort Definition for Selection Sort
-static const Sort Selection = { .sort = SelectionSort, .name = "SelectionSort" };
+#define SELECTION_SORT (Sort){ .sort = SelectionSort, .name = "SelectionSort" }
 
 #endif
