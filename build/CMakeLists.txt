@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.8)
 
 project(Lab2)
 
@@ -23,7 +23,7 @@ else()
         COMPILE_FLAGS "-Wall -Wextra -pedantic -fopenmp"
         COMPILE_FLAGS_DEBUG "-DDEBUG -Og -g"
         COMPILE_FLAGS_RELEASE "-flto -DNDEBUG -Ofast -mtune=native -march=native -fprofile-use"
-        LINK_FLAGS "-flto -pie -fopenmp"
+        LINK_FLAGS "-flto -fopenmp"
     )
 endif()
 

@@ -42,11 +42,11 @@
 #include "SortBenchmark.h"
 
 /// The Minimum Number of Elements to Test
-#define MIN 10
+#define MIN 100
 /// The Maximum Number of Elements to Test
-#define MAX 2000
+#define MAX 30000
 /// How Far Apart Two Trials should be
-#define STEP 10
+#define STEP 100
 /// How Big of an array is needed to store this data
 #define SIZE (MAX - MIN)/STEP
 
@@ -65,7 +65,7 @@ int main() {
     for(Data i = 0; i < SIZE; i++)
         n[i] = MIN + STEP * i;
 
-    BenchmarkSorts(sorts, numsorts, n, SIZE, 10);
+    BenchmarkSorts(sorts, numsorts, n, SIZE, 5);
 
 }
 

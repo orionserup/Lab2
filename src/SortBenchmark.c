@@ -18,7 +18,7 @@ static void WriteSortDataToFile(FILE* const file, const SortData* const times, c
 // Benchmarks all all of the sorts in an array a number of times 
 void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes) {
 
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for(size_t sortnum = 0; sortnum < numsorts; sortnum++)
         BenchmarkSort(sorts[sortnum], trials, numtrials, numtimes);
 
@@ -55,31 +55,46 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     strcpy(buffer + offset, "Avg.csv");
     FILE* ave = fopen(buffer, "w");
 
-    SortData* besttimes = malloc(numtrials * sizeof(SortData));  // arrays to store the sorting results
-    SortData* worsttimes = malloc(numtrials * sizeof(SortData));
-    SortData* avetimes = malloc(numtrials * sizeof(SortData));
+    SortData* besttimes = malloc(numtrials * numtimes * sizeof(SortData));  // arrays to store the sorting results
+    SortData* worsttimes = malloc(numtrials * numtimes * sizeof(SortData));
+    SortData* avetimes = malloc(numtrials * numtimes * sizeof(SortData));
 
     Data* array = malloc(Max(trials, numtrials) * sizeof(Data));
 
-    for(size_t times = 0; times < numtimes; times++) {
+    for(size_t i = 0; i < numtrials; i++) {
 
-        for(size_t i = 0; i < numtrials; i++) {
+        for(size_t j = 0; j < numtimes; j++) {
 
             GenerateWorstCase(array, trials[i]);
-            worsttimes[i] = TimeSort(sort.sort, array, trials[i]);
+            worsttimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]);
         
             GenerateAverageCase(array, trials[i]);
-            avetimes[i] = TimeSort(sort.sort, array, trials[i]);
+            avetimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]); // Its sorted after this
         
-            besttimes[i] = TimeSort(sort.sort, array, trials[i]);
-    
+            besttimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]);
+
+        }
+    }
+
+    for(size_t i = 0; i < numtrials; i++) { // Take the Average of all the times 
+
+        for(size_t j = 1; j < numtimes; j++) { // sum up the elements
+
+            worsttimes[i].time_ms += worsttimes[ i + j * numtrials].time_ms;  
+            avetimes[i].time_ms += avetimes[i + j * numtrials].time_ms;
+            besttimes[i].time_ms += besttimes[i + j * numtrials].time_ms;
+        
         }
 
-        WriteSortDataToFile(best, besttimes, numtrials);
-        WriteSortDataToFile(worst, worsttimes, numtrials);
-        WriteSortDataToFile(ave, avetimes, numtrials);
+        worsttimes[i].time_ms /= numtimes;  // divide the sum by the number of elements
+        besttimes[i].time_ms /= numtimes;
+        worsttimes[i].time_ms /= numtimes;
 
     }
+
+    WriteSortDataToFile(best, besttimes, numtrials);
+    WriteSortDataToFile(worst, worsttimes, numtrials);
+    WriteSortDataToFile(ave, avetimes, numtrials);
 
     free(besttimes);
     free(worsttimes);
