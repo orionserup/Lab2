@@ -1,7 +1,7 @@
 /**
  * \file QuickSort.c
  * \author Orion Serup (orionserup@gmail.com)
- * \brief Contains the Implementation of Quick Sort
+ * \brief Contains the Implementation of Quick Sort and its helpers
  * \version 0.1
  * \date 2022-01-09
  * 

@@ -56,7 +56,12 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
     
     // Array to store the number of numbers that have the digit cooresponding to the index of the array 
     size_t count[RADIX] = {0};
+
+    #ifndef VLA
     Data* out = malloc(size * sizeof(Data)); // copy of the input array that we can manipulate
+    #else 
+    Data out[size];
+    #endif
 
     // Fill the Count Array With The Correct Values (The Number of Times the Array has the number i in its place place)
     for(size_t i = 0; i < size; i++)
@@ -75,7 +80,10 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
     }
 
     memcpy(array, out, size * sizeof(Data));  // copy the temporary output array to the array  
+    
+    #ifndef VLA
     free(out);
+    #endif
 
     return array; // return the sorted array
 
@@ -90,14 +98,9 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
  */
 size_t FindNumIterations(Data max) {
 
-    size_t i = 0;
+    size_t i = 1;
 
-    while(max) {
-    
-        max >>= RADIX_POW;
-        i++;
-    
-    }
+    while(max >>= RADIX_POW && i++);
 
     return i;
 

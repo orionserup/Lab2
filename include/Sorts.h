@@ -1,7 +1,7 @@
 /**
  * \file Sorts.h
  * \author Orion Serup (orionserup@gmail.com)
- * \brief 
+ * \brief Quick Include that includes all of the Sorts
  * \version 0.1
  * \date 2022-01-10
  * 

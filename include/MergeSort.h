@@ -1,7 +1,7 @@
 /**
  * \file MergeSort.h
  * \author Orion Serup (orionserup@gmail.com)
- * \brief 
+ * \brief Contains the Definition of Merge Sort
  * \version 0.1
  * \date 01-12-2022
  * 

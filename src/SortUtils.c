@@ -65,7 +65,7 @@ void fPrintArray(FILE* const file, const Data* const array, const size_t size) {
     Assert(array, "Invalid array in fPrintArray");
 
     for(size_t i = 0; i < size; i++)  // Goes through the whole array, it it hits the end, place a new line
-        fprintf(file, "%lld ", (int64_t)array[i]); // Print Each element to the file
+        fprintf(file, "%ld ", (int64_t)array[i]); // Print Each element to the file
 
     fputc('\n', file);
 

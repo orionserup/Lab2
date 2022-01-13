@@ -1,7 +1,7 @@
 /**
  * \file SortParams.h
  * \author Orion Serup (orionserup@gmail.com)
- * \brief 
+ * \brief Constains the Essential Paramters for the Sorts
  * \version 0.1
  * \date 2022-01-10
  * 
@@ -12,8 +12,8 @@
 #include <stdint.h>
 
 // Data Type for all of the Arrays
-typedef uint64_t Data;
+typedef uint32_t Data;
 
 // The Power of the Radix, so the Radix is 2 ^ RADIX_POW
-#define RADIX_POW sizeof(Data)*2
+#define RADIX_POW sizeof(Data) << 1
 

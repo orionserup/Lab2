@@ -10,7 +10,9 @@
  */
 
 #include "SortBenchmark.h"
+#ifdef PARALLEL
 #include <omp.h>
+#endif
 
 // Writes an Array of SortData to a File
 static void WriteSortDataToFile(FILE* const file, const SortData* const times, const size_t size);
@@ -18,7 +20,9 @@ static void WriteSortDataToFile(FILE* const file, const SortData* const times, c
 // Benchmarks all all of the sorts in an array a number of times 
 void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes) {
 
+    #ifdef PARALLEL
     #pragma omp parallel for
+    #endif
     for(size_t sortnum = 0; sortnum < numsorts; sortnum++)
         BenchmarkSort(sorts[sortnum], trials, numtrials, numtimes);
 
@@ -55,12 +59,23 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     strcpy(buffer + offset, "Avg.csv");
     FILE* ave = fopen(buffer, "w");
 
+    #ifndef VLA // We have to use malloc in windows over VLAs
     SortData* besttimes = malloc(numtrials * numtimes * sizeof(SortData));  // arrays to store the sorting results
     SortData* worsttimes = malloc(numtrials * numtimes * sizeof(SortData));
     SortData* avetimes = malloc(numtrials * numtimes * sizeof(SortData));
 
     Data* array = malloc(Max(trials, numtrials) * sizeof(Data));
+    #else
+    SortData besttimes[numtrials * numtimes]; // arrays to store the sorting results
+    SortData worsttimes[numtrials * numtimes];
+    SortData avetimes[numtrials * numtimes];
 
+    Data array[Max(trials, numtrials) * sizeof(Data)];
+    #endif
+
+    #ifdef PARALLEL
+    #pragma omp parallel for
+    #endif
     for(size_t i = 0; i < numtrials; i++) {
 
         for(size_t j = 0; j < numtimes; j++) {
@@ -76,6 +91,9 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
         }
     }
 
+    #ifdef PARALLEL
+    #pragma omp parallel for
+    #endif
     for(size_t i = 0; i < numtrials; i++) { // Take the Average of all the times 
 
         for(size_t j = 1; j < numtimes; j++) { // sum up the elements
@@ -96,11 +114,13 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     WriteSortDataToFile(worst, worsttimes, numtrials);
     WriteSortDataToFile(ave, avetimes, numtrials);
 
+    #ifndef VLA
     free(besttimes);
     free(worsttimes);
     free(avetimes);
 
     free(array);
+    #endif
 
     fclose(best);
     fclose(worst);

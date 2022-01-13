@@ -44,29 +44,27 @@
 /// The Minimum Number of Elements to Test
 #define MIN 100
 /// The Maximum Number of Elements to Test
-#define MAX 30000
+#define MAX 50000
 /// How Far Apart Two Trials should be
 #define STEP 100
 /// How Big of an array is needed to store this data
-#define SIZE (MAX - MIN)/STEP
+#define SIZE (MAX - MIN) / STEP
 
 /**
  * \brief The Entry Point of the Program
  * 
- * \return int The Status Code
+ * \return int: The Status Code
  */
 int main() {
 
-    Sort sorts[] = { MERGE_SORT, INSERTION_SORT, SELECTION_SORT, RADIX_SORT };
+    Sort sorts[] = { MERGE_SORT, INSERTION_SORT, RADIX_SORT, SELECTION_SORT };
     const size_t numsorts = sizeof(sorts)/sizeof(Sort);
 
     Data n[SIZE];
-
     for(Data i = 0; i < SIZE; i++)
         n[i] = MIN + STEP * i;
 
     BenchmarkSorts(sorts, numsorts, n, SIZE, 100);
-
 
 }
 
