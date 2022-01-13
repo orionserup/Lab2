@@ -8,7 +8,7 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.c)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ../include)
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED True)
 
 if(MSVC)
