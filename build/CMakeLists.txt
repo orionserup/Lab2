@@ -13,9 +13,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED True)
 if(MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES 
         COMPILE_FLAGS "/W4 /openmp"
-        COMILE_FLAGS_DEBUG "/DEBUG /DDEBUG /D_DEBUG /Od"
+        COMPILE_DEFINITIONS "DEBUG_RADIX"
+        COMILE_FLAGS_DEBUG "/DEBUG /DDEBUG /D_DEBUG /DDEBUG_RADIX /Od"
         COMPILE_FLAGS_RELEASE "/Ox /GL /LTCG"
-        LINK_FLAGS "/openmp"
     )
 else()
     set_target_properties(${PROJECT_NAME} PROPERTIES

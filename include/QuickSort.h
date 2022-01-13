@@ -23,6 +23,6 @@
 Data* QuickSort(Data* const array, const size_t size);
 
 /// Global Sort Definition For Quick Sort 
-#define QUICK_SORT (Sort){ .sort = QuickSort, .name = "QuickSort" }
+#define QUICK_SORT (const Sort){ QuickSort, "QuickSort" }
 
 #endif

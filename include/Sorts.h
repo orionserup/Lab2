@@ -16,7 +16,4 @@
 #include "SelectionSort.h"
 #include "MergeSort.h"
 
-static const Sort allsorts[] = { SELECTION_SORT, HEAP_SORT, RADIX_SORT, QUICK_SORT, MERGE_SORT };
-static const size_t numsorts  = sizeof(allsorts)/sizeof(Sort);
-
 

@@ -10,7 +10,6 @@
  */
 #ifndef INSERTION_SORT
 
-
 #include "SortUtils.h"
 
 /**
@@ -23,6 +22,6 @@
 Data* InsertionSort(Data* const array, const size_t size);
 
 /// Our Global Insertion Sort Object
-#define INSERTION_SORT (Sort){ .sort = InsertionSort, .name = "InsertionSort" }
+#define INSERTION_SORT (const Sort){ InsertionSort,"InsertionSort" }
 
 #endif

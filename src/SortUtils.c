@@ -16,7 +16,7 @@ Data Max(const Data* const array, const size_t size) {
 
     Assert(array, "Invalid Array in Find Max");
 
-    if(size == 0) return (Data)INT64_MIN; // If there are no elements there is no max
+    if(size == 0) return minof(Data); // If there are no elements there is no max
     else if(size == 1) return array[0];  // if there is only one element then its the first
     
     Data max = array[0]; // we choose the max t be the first element to start with
@@ -64,8 +64,10 @@ void fPrintArray(FILE* const file, const Data* const array, const size_t size) {
     Assert(file, "Invalid file pointer in fPrintArray");
     Assert(array, "Invalid array in fPrintArray");
 
-    for(size_t i = 0; i < size || !fputs("\n", file); i++)  // Goes through the whole array, it it hits the end, place a new line
-        fprintf(file, "%ld ", (int64_t)array[i]); // Print Each element to the file
+    for(size_t i = 0; i < size; i++)  // Goes through the whole array, it it hits the end, place a new line
+        fprintf(file, "%lld ", (int64_t)array[i]); // Print Each element to the file
+
+    fputc('\n', file);
 
 }
 

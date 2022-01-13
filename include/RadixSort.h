@@ -38,6 +38,6 @@ Data* RadixSort(Data* const array, const size_t size);
 Data* CountingSort(Data* const array, const size_t size, const size_t place);
 
 /// Global Sort Definition for Radix Sort 
-#define RADIX_SORT (Sort){ .sort = RadixSort, .name = "RadixSort" }
+#define RADIX_SORT (const Sort){ RadixSort, "RadixSort" }
 
 #endif

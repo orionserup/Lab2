@@ -20,3 +20,4 @@ Data* MergeSort(Data* const array, const size_t size) {
     return array;
 
 }
+

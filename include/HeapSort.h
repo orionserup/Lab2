@@ -23,6 +23,6 @@
  */
 Data* HeapSort(Data* const array, const size_t size);
 
-#define HEAP_SORT (Sort){ .sort = HeapSort, .name = "HeapSort" }
+#define HEAP_SORT (const Sort){ HeapSort, "HeapSort" }
 
 #endif

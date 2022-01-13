@@ -23,6 +23,6 @@
 Data* SelectionSort(Data* const array, const size_t size);
 
 /// Global Sort Definition for Selection Sort
-#define SELECTION_SORT (Sort){ .sort = SelectionSort, .name = "SelectionSort" }
+#define SELECTION_SORT (const Sort){ SelectionSort, "SelectionSort"}
 
 #endif

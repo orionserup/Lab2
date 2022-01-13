@@ -22,6 +22,6 @@
  */
 Data* MergeSort(Data* const array, const size_t size);
 
-#define MERGE_SORT (Sort){ .sort = MergeSort, .name = "MergeSort" }
+#define MERGE_SORT (const Sort){ MergeSort, "MergeSort" }
 
 #endif

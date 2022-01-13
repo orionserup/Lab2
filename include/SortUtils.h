@@ -33,6 +33,8 @@
 
 #define maxof(t) ((unsigned long long) (issigned(t) ? smaxof(t) : umaxof(t)))
 
+#define minof(t) ((issigned(t) * -maxof(t)) - 1 + !issigned(t)*1)
+
 // Fancy Assert For Much Easier Debug, Prints Custom Message, Line Number and File Name in Red
 #ifdef __unix__
 /// Linux/MAC Debug Assert, Adds Coloration, Messages, and File and Line Numbers for Better Debugging

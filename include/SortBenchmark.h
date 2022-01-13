@@ -47,8 +47,9 @@ SortData TimeSort(Data* (*Sort)(Data* const array, const size_t size), Data* con
  * \param sort: The Sort To Benchmark
  * \param trials: An Array of values of N to Test the sort with
  * \param numtrials: The Number of Times to Benchmark the Sort, Adds all of the Data to One File
+ * \param numtimes:  
  */
-void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials);
+void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials, const size_t numtimes);
 
 /**
  * \brief 
@@ -57,8 +58,9 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
  * \param numsorts
  * \param trials
  * \param numtrials
+ * \param numtimes
  */
-void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials);
+void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes);
 
 /**
  * \brief  Times the Given Sort for When the Array is Already sorted
@@ -67,7 +69,7 @@ void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* 
  * \param  n: The Number of Elements to test it with
  * \retval SortData: How Long it Took and How many elements it proccessed
  */
-SortData TestBestCase(const Sort* const sort, const size_t n);
+Data* GenerateBestCase(Data* const array, const size_t n);
 
 /**
  * \brief  Tests the Sort in the Worst Case (Reverse Order)
@@ -76,7 +78,7 @@ SortData TestBestCase(const Sort* const sort, const size_t n);
  * \param  n: Number of elements to test it with
  * \retval SortData: The Time it tool and how many elements it procossed
  */
-SortData TestWorstCase(const Sort* const sort, const size_t n);
+Data* GenerateWorstCase(Data* const array, const size_t n);
 
 /**
  * \brief  Tests a Sort for the Average Case (Random Values)
@@ -85,6 +87,6 @@ SortData TestWorstCase(const Sort* const sort, const size_t n);
  * \param  n: The Number of Elements to test
  * \retval SortData: How Long it took and how many elements were processed
  */
-SortData TestAverageCase(const Sort* const sort, const size_t n);
+Data* GenerateAverageCase(Data* const array, const size_t n);
 
 #endif

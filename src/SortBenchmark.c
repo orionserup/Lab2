@@ -16,15 +16,15 @@
 static void WriteSortDataToFile(FILE* const file, const SortData* const times, const size_t size);
 
 // Benchmarks all all of the sorts in an array a number of times 
-void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials) {
+void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes) {
 
-    #pragma omp parallel for    
+    // #pragma omp parallel for
     for(size_t sortnum = 0; sortnum < numsorts; sortnum++)
-        BenchmarkSort(sorts[sortnum], trials, numtrials);
+        BenchmarkSort(sorts[sortnum], trials, numtrials, numtimes);
 
 }
 
-void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials) {
+void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials, const size_t numtimes) {
 
     Assert(sort.sort, "Invalid Sort Function in Sort Benchmark");
     Assert(trials, "Invalid Trials Array In Sort Benchmark");
@@ -32,44 +32,66 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
 
     if(numtrials == 0) return;
 
+    char buffer[100];
+
+    #ifdef _MSC_VER // If using the Visual Studio Compiler 
+    const char* const path = "..\\..\\data\\";
+    #else
+    const char* const path = "../data/";
+    #endif
+
+    size_t offset = strlen(path) + strlen(sort.name);
+
+    strcpy_s(buffer, sizeof(buffer), path); // copy the path to the buffer
+    strcat_s(buffer, sizeof(buffer), sort.name); // add the Sort Name to the Name       
+
+    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Best.csv"); // Add Best for the Best Case Data
+    FILE* best;
+    if(fopen_s(&best, buffer, "w"))
+        printf("Could Not Open File %s For Writing", buffer); // Open the Best Case Data File and catch errors
+    
+    // repeat for Worst and Average Case
+    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Worst.csv");
+    FILE* worst;
+    if(fopen_s(&worst, buffer, "w"))
+        printf("Could Not Open File %s For Writing", buffer);
+
+    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Avg.csv");
+    FILE* ave;
+    if(fopen_s(&ave, buffer, "w"))
+        printf("Could Not Open File %s For Writing", buffer);
+
     SortData* besttimes = malloc(numtrials * sizeof(SortData));  // arrays to store the sorting results
     SortData* worsttimes = malloc(numtrials * sizeof(SortData));
     SortData* avetimes = malloc(numtrials * sizeof(SortData));
 
-    char buffer[100];
+    Data* array = malloc(Max(trials, numtrials) * sizeof(Data));
 
-    const char* const path = "../data/";
-    size_t offset = strlen(path) + strlen(sort.name);
+    for(size_t times = 0; times < numtimes; times++) {
 
-    strcpy(buffer, path); // copy the path to the buffer
-    strcat(buffer, sort.name); // add the Sort Name to the Name       
+        for(size_t i = 0; i < numtrials; i++) {
 
-    strcpy(buffer + offset, "Best.csv"); // Add Best for the Best Case Data
-    FILE* best = fopen(buffer, "w"); // Open the Best Case Data File
+            GenerateWorstCase(array, trials[i]);
+            worsttimes[i] = TimeSort(sort.sort, array, trials[i]);
+        
+            GenerateAverageCase(array, trials[i]);
+            avetimes[i] = TimeSort(sort.sort, array, trials[i]);
+        
+            besttimes[i] = TimeSort(sort.sort, array, trials[i]);
+    
+        }
 
-    // repeat for Worst and Average Case
-    strcpy(buffer + offset, "Worst.csv");
-    FILE* worst = fopen(buffer, "w");
-
-    strcpy(buffer + offset, "Avg.csv");
-    FILE* ave = fopen(buffer, "w");
-
-    //#pragma omp parallel for
-    for(size_t i = 0; i < numtrials; i++) {
-
-        besttimes[i] = TestBestCase(&sort, trials[i]);
-        worsttimes[i] = TestWorstCase(&sort, trials[i]);
-        avetimes[i] = TestAverageCase(&sort, trials[i]);
+        WriteSortDataToFile(best, besttimes, numtrials);
+        WriteSortDataToFile(worst, worsttimes, numtrials);
+        WriteSortDataToFile(ave, avetimes, numtrials);
 
     }
-
-    WriteSortDataToFile(best, besttimes, numtrials);
-    WriteSortDataToFile(worst, worsttimes, numtrials);
-    WriteSortDataToFile(ave, avetimes, numtrials);
 
     free(besttimes);
     free(worsttimes);
     free(avetimes);
+
+    free(array);
 
     fclose(best);
     fclose(worst);
@@ -101,50 +123,44 @@ void WriteSortDataToFile(FILE* const file, const SortData* const times, const si
     Assert(times, "Bad Times Array in Write Sort Data to File");
 
     for(size_t i = 0; i < size; i++)  // For Every Data Point Follow CSV rules
-        fprintf(file, "%lu,%lf\n", times[i].n, times[i].time_ms);
+        fprintf(file, "%zu,%lf\n", times[i].n, times[i].time_ms);
 
 }
 
 // Tests the Sort for the Best Case Scenario (Already Sorted)
-SortData TestBestCase(const Sort* const sort, const size_t n) {
+Data* GenerateBestCase(Data* const array, const size_t n) {
 
-    Assert(sort, "Invalid Sort Pointer in Best Case Test");
-    Assert(sort->sort, "Invalid Sort Function Pointer in Best Case Test");
+    Assert(array, "Invalid Array Pointer in Best Case Generator");
 
-    Data array[n + 1]; // Create your array big enough so there is no memory issue
-    for(Data i = 0; i < (Data)n; i++) 
+    for(Data i = 0; i < n; i++) 
         array[i] = i;  // fill the array from 0 to n
     
-    return TimeSort(sort->sort, array, n); // Time the Sort and return the results
+    return array; // Time the Sort and return the results
 
 }
 
-// Tests the Sort for the Worst Case ( Reverse Ordered )
-SortData TestWorstCase(const Sort* const sort, const size_t n) {
+// Fills the Array with the Worst Case ( Reverse Ordered )
+Data* GenerateWorstCase(Data* const array, const size_t n) {
 
-    Assert(sort, "Invalid Sort Pointer in Worst Case Test");
-    Assert(sort->sort, "Invalid Sort Function Pointer in Worst Case Test");
+    Assert(array, "Invalid Array Pointer in Worst Case Test");
 
-    Data array[n + 1]; // create testing array
-    for(Data i = 0; i < n; i++)
+    for(Data i = 0; i < (Data)n; i++)
         array[i] = maxof(Data) - i; // fill the array from INT_MAX to INT_MAX - n
     
-    return TimeSort(sort->sort, array, n); // return the Timing Result
+    return array;
 
 }
 
-// Tests the Sort for the Average Case ( Random Data)
-SortData TestAverageCase(const Sort* const sort, const size_t n) {
+// Fills an Array with random Data
+Data* GenerateAverageCase(Data* const array, const size_t n) {
 
-    Assert(sort, "Invalid Sort Pointer in Average Case Test");
-    Assert(sort->sort, "Invalid Sort Function Pointer in Average Case Test");
+    Assert(array, "Invalid Array Pointer in Average Case Generator");
     
     srand(clock()); // seed the random generator 
 
-    Data array[n + 1];
-    for(size_t i = 0; i < n; i++)
+    for(Data i = 0; i < n; i++)
         array[i] = rand() & maxof(Data);  // fill the array with n random numbers
 
-    return TimeSort(sort->sort, array, n); // Time the Sort and Return the Result
+    return array; // Time the Sort and Return the Result
 
 }

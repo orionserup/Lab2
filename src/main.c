@@ -40,6 +40,11 @@
 #include "Sorts.h"
 #include "SortBenchmark.h"
 
+#define MIN 0
+#define MAX 10
+#define STEP 1
+#define SIZE (MAX - MIN)/STEP
+
 /**
  * \brief The Entry Point of the Program
  * 
@@ -47,17 +52,16 @@
  */
 int main() {
 
-    ///The Sorts to Test
-    const Sort sorts[] = { SELECTION_SORT, INSERTION_SORT, RADIX_SORT };
+    Sort sorts[] = { INSERTION_SORT, RADIX_SORT, SELECTION_SORT };
+    const size_t numsorts = sizeof(sorts)/sizeof(Sort);
 
-    Data n[UINT16_MAX/16];
+    Data n[SIZE];
 
-    for(Data i = 0; i < UINT16_MAX/16; i++)
-        n[i] = i*16;
+    for(Data i = 0; i < SIZE; i++)
+        n[i] = MIN + STEP * i;
 
-    Assert(Max(n, sizeof(n) / 8) < maxof(Data), "You cannot Test Best and Worse");
+    BenchmarkSorts(sorts, numsorts, n, SIZE, 1);
 
-    BenchmarkSorts(sorts, 3, n, sizeof(n)/sizeof(n[0]));
 
 }
 

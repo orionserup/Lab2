@@ -15,3 +15,5 @@ latex/
 *.filters
 x64/
 *.dir/
+Debug/
+Release/
