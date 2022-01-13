@@ -146,10 +146,6 @@ Data* GenerateWorstCase(Data* const array, const size_t n) {
 
     for(Data i = 0; i < (Data)n; i++)
         array[i] = maxof(Data) - i; // fill the array from INT_MAX to INT_MAX - n
-    
-    return array;
-
-}
 
 // Fills an Array with random Data
 Data* GenerateAverageCase(Data* const array, const size_t n) {

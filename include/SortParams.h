@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 // Data Type for all of the Arrays
-typedef uint32_t Data;
+typedef uint64_t Data;
 
 // The Power of the Radix, so the Radix is 2 ^ RADIX_POW
 #define RADIX_POW sizeof(Data)*2

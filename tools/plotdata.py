@@ -15,7 +15,7 @@ if __name__ == "__main__":
     for i in range(len(xdata)):
         plt.xlabel("Number Of Elements")
         plt.ylabel("Time To Sort (ms)")
-        plt.plot(xdata[i], ydata[i], 'r-')
+        plt.plot(xdata[i], ydata[i], 'r.')
         plt.title(titles[i])    
         plt.savefig(path + titles[i] + ".png")
         plt.close()

@@ -17,3 +17,4 @@ x64/
 *.dir/
 Debug/
 Release/
+*.log

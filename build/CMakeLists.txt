@@ -19,10 +19,10 @@ if(MSVC)
     )
 else()
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        COMPILE_FLAGS "-Wall -Wextra -pedantic -fopenmp"
+        COMPILE_FLAGS "-Wall -Wextra -pedantic"
         COMPILE_FLAGS_DEBUG "-DDEBUG -Og -g"
-        COMPILE_FLAGS_RELEASE "-flto -DNDEBUG -Ofast -mtune=native -march=native"
-        LINK_FLAGS "-fopenmp"
+        COMPILE_FLAGS_RELEASE "-flto -DNDEBUG -Ofast -mtune=native -march=native -fprofile-use"
+        LINK_FLAGS "-flto -pie"
     )
 endif()
 
