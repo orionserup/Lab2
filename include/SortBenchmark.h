@@ -47,18 +47,18 @@ SortData TimeSort(Data* (*Sort)(Data* const array, const size_t size), Data* con
  * \param sort: The Sort To Benchmark
  * \param trials: An Array of values of N to Test the sort with
  * \param numtrials: The Number of Times to Benchmark the Sort, Adds all of the Data to One File
- * \param numtimes:  
+ * \param numtimes: The Number of times to repeat the benchmark
  */
 void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtrials, const size_t numtimes);
 
 /**
- * \brief 
+ * \brief Benchmarks a Sort by Timing a Best, worst, and average case for all array sizes defined in trials
  * 
- * \param sorts
- * \param numsorts
- * \param trials
- * \param numtrials
- * \param numtimes
+ * \param sorts: Array of Sorts to Bench
+ * \param numsorts: The Number of Sorts
+ * \param trials: The Array full of array size values for the benchmark
+ * \param numtrials: The Number of elements in the trials array
+ * \param numtimes: The Number of times to repeat the benchmark for each sort
  */
 void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes);
 

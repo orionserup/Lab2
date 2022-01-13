@@ -18,7 +18,7 @@ static void WriteSortDataToFile(FILE* const file, const SortData* const times, c
 // Benchmarks all all of the sorts in an array a number of times 
 void BenchmarkSorts(const Sort* const sorts, const size_t numsorts, const Data* const trials, const size_t numtrials, const size_t numtimes) {
 
-    // #pragma omp parallel for
+    //#pragma omp parallel for
     for(size_t sortnum = 0; sortnum < numsorts; sortnum++)
         BenchmarkSort(sorts[sortnum], trials, numtrials, numtimes);
 
@@ -42,24 +42,18 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
 
     size_t offset = strlen(path) + strlen(sort.name);
 
-    strcpy_s(buffer, sizeof(buffer), path); // copy the path to the buffer
-    strcat_s(buffer, sizeof(buffer), sort.name); // add the Sort Name to the Name       
+    strcpy(buffer, path); // copy the path to the buffer
+    strcat(buffer, sort.name); // add the Sort Name to the Name       
 
-    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Best.csv"); // Add Best for the Best Case Data
-    FILE* best;
-    if(fopen_s(&best, buffer, "w"))
-        printf("Could Not Open File %s For Writing", buffer); // Open the Best Case Data File and catch errors
+    strcpy(buffer + offset, "Best.csv"); // Add Best for the Best Case Data
+    FILE* best = fopen(buffer, "w");
     
     // repeat for Worst and Average Case
-    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Worst.csv");
-    FILE* worst;
-    if(fopen_s(&worst, buffer, "w"))
-        printf("Could Not Open File %s For Writing", buffer);
+    strcpy(buffer + offset, "Worst.csv");
+    FILE* worst = fopen(buffer, "w");
 
-    strcpy_s(buffer + offset, sizeof(buffer) - offset, "Avg.csv");
-    FILE* ave;
-    if(fopen_s(&ave, buffer, "w"))
-        printf("Could Not Open File %s For Writing", buffer);
+    strcpy(buffer + offset, "Avg.csv");
+    FILE* ave = fopen(buffer, "w");
 
     SortData* besttimes = malloc(numtrials * sizeof(SortData));  // arrays to store the sorting results
     SortData* worsttimes = malloc(numtrials * sizeof(SortData));
@@ -147,12 +141,16 @@ Data* GenerateWorstCase(Data* const array, const size_t n) {
     for(Data i = 0; i < (Data)n; i++)
         array[i] = maxof(Data) - i; // fill the array from INT_MAX to INT_MAX - n
 
+    return array;
+
+}
+
 // Fills an Array with random Data
 Data* GenerateAverageCase(Data* const array, const size_t n) {
 
     Assert(array, "Invalid Array Pointer in Average Case Generator");
     
-    srand(clock()); // seed the random generator 
+    srand(time(NULL)); // seed the random generator 
 
     for(Data i = 0; i < n; i++)
         array[i] = rand() & maxof(Data);  // fill the array with n random numbers
