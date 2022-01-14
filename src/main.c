@@ -60,7 +60,7 @@ int main() {
     for(Data i = 0; i < SIZE; i++)
         n[i] = MIN + STEP * i;
 
-    BenchmarkSorts(sorts, numsorts, n, SIZE, 1);
+    BenchmarkSorts(sorts, numsorts, n, SIZE, 100);
 
 
 }
