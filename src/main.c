@@ -13,22 +13,23 @@
  * \mainpage EECS 114 Sorts and Benchmarking
  * 
  * This Project, as a part of EECS 114 at UCI tries to implement many common sorts in C. \n
- * It Implements Insertion, Radix, Heap, and Selection Sort, as well as more to come \n \n
+ * It Implements the following sorts as well as more to come \n \n
  *  
  * \ref RadixSort \n
  * \ref HeapSort \n
  * \ref InsertionSort \n
- * \ref SelectionSort \n \n
+ * \ref SelectionSort \n
+ * \ref QuickSort \n
+ * \ref MergeSort \n
+ * 
+ * \n
  * 
  * The project also defines a way to log and benchmark sorts. It creates generalized sorts and provides structures for testing and timing. \n \n
  * 
  * \ref Sort   \n
  * \ref TimeSort \n
  * \ref BenchmarkSorts \n
- * \ref TestBestCase \n
- * \ref TestWorstCase \n
- * \ref TestAverageCase \n \n
- * 
+ * \ref BenchmarkSort \n \n
  * It also Provides Common Utilities for Other Users and Use Cases \n \n
  * 
  * \ref SortUtils.h \n \n \n
@@ -40,9 +41,13 @@
 #include "Sorts.h"
 #include "SortBenchmark.h"
 
-#define MIN 0
-#define MAX 10
-#define STEP 1
+/// The Minimum Number of Elements to Test
+#define MIN 100
+/// The Maximum Number of Elements to Test
+#define MAX 30000
+/// How Far Apart Two Trials should be
+#define STEP 100
+/// How Big of an array is needed to store this data
 #define SIZE (MAX - MIN)/STEP
 
 /**
@@ -52,7 +57,7 @@
  */
 int main() {
 
-    Sort sorts[] = { INSERTION_SORT, RADIX_SORT, SELECTION_SORT };
+    Sort sorts[] = { MERGE_SORT, INSERTION_SORT, SELECTION_SORT, RADIX_SORT };
     const size_t numsorts = sizeof(sorts)/sizeof(Sort);
 
     Data n[SIZE];

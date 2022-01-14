@@ -23,16 +23,21 @@
 
 #include "SortParams.h"
 
+/// Checks if a Data Type is Signed or Not
 #define issigned(t) (((t)(-1)) < ((t) 0))
 
+/// Gets the Unsigned Max of a Type
 #define umaxof(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | \
                     (0xFULL << ((sizeof(t) * 8ULL) - 4ULL)))
 
+/// Gets the Signed Max of a Type t
 #define smaxof(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | \
                     (0x7ULL << ((sizeof(t) * 8ULL) - 4ULL)))
 
+/// Gets the Maximum Value of a Type t
 #define maxof(t) ((unsigned long long) (issigned(t) ? smaxof(t) : umaxof(t)))
 
+/// Gets the Minimum Value of a Type t
 #define minof(t) ((issigned(t) * -maxof(t)) - 1 + !issigned(t)*1)
 
 // Fancy Assert For Much Easier Debug, Prints Custom Message, Line Number and File Name in Red

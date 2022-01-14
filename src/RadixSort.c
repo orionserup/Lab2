@@ -74,7 +74,7 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
 
     }
 
-    memcpy(array, out, sizeof(size * sizeof(Data)));  // copy the temporary output array to the array  
+    memcpy(array, out, size * sizeof(Data));  // copy the temporary output array to the array  
     free(out);
 
     return array; // return the sorted array
