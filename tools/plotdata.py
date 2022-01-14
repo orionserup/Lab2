@@ -27,7 +27,7 @@ def PlotCSVData(path, combined):
         for i in range(len(xdata)):
             plt.xlabel("Number Of Elements")
             plt.ylabel("Time To Sort (ms)")
-            plt.plot(xdata[i], ydata[i], 'r.')
+            plt.plot(xdata[i], ydata[i], '.')
             plt.title(titles[i])    
             plt.savefig(path + titles[i] + ".png")
             plt.close()
@@ -43,7 +43,8 @@ if __name__ == "__main__":
             combined = True
         elif "--path=" in arg:
             path = arg.split("--path=")[1]
-        else:
-            print("Usage: python3 plotdata.py [--combined] [--path=<path to data>]")
+        elif "-h" in arg or "--help" in arg:
+            print("Usage: python plotdata.py [--combined] [--path=<path to data>]")
+            exit()
 
     PlotCSVData(path, combined)

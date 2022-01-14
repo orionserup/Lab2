@@ -19,7 +19,7 @@ if(MSVC)
     )
 else()
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        COMPILE_FLAGS "-Wall -Wextra -pedantic -DVLA "
+        COMPILE_FLAGS "-Wall -Wextra -pedantic"
         COMPILE_FLAGS_DEBUG "-Og -g -DDEBUG"
         COMPILE_FLAGS_RELEASE "-Ofast -DNDEBUG -mtune=native -march=native -fprofile-use -fopenmp"
         LINK_FLAGS_RELEASE "-flto -fprofile-use -fopenmp"

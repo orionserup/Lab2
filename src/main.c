@@ -21,7 +21,6 @@
  * \ref SelectionSort \n
  * \ref QuickSort \n
  * \ref MergeSort \n
- * 
  * \n
  * 
  * The project also defines a way to log and benchmark sorts. It creates generalized sorts and provides structures for testing and timing. \n \n
@@ -42,11 +41,11 @@
 #include "SortBenchmark.h"
 
 /// The Minimum Number of Elements to Test
-#define MIN 100
+#define MIN 1
 /// The Maximum Number of Elements to Test
 #define MAX 50000
 /// How Far Apart Two Trials should be
-#define STEP 100
+#define STEP 10
 /// How Big of an array is needed to store this data
 #define SIZE (MAX - MIN) / STEP
 
@@ -57,14 +56,16 @@
  */
 int main() {
 
-    Sort sorts[] = { MERGE_SORT, INSERTION_SORT, RADIX_SORT, SELECTION_SORT };
+    Sort sorts[] = { RADIX_SORT };
     const size_t numsorts = sizeof(sorts)/sizeof(Sort);
 
     Data n[SIZE];
     for(Data i = 0; i < SIZE; i++)
         n[i] = MIN + STEP * i;
 
-    BenchmarkSorts(sorts, numsorts, n, SIZE, 100);
+    BenchmarkSorts(sorts, numsorts, n, SIZE, 10);
+
+    return EXIT_SUCCESS;
 
 }
 
