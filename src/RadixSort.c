@@ -14,8 +14,18 @@
 /// The Actual Radix (aka The Number we are taking the remainder of for the Sort) 
 #define RADIX (1 << RADIX_POW)
 
+#if (RADIX_POW <= 8) 
+typedef uint8_t Digit;
+#elif (RADIX_POW <= 16)
+typedef uint16_t Digit;
+elif (RADIX_POW < = 32)
+typedef uint32_t Digit;
+#endif
+
 /// Finds the Number of Counting Sort Iterations Needed to Sort the Number Max
 static inline size_t FindNumIterations(Data max);
+
+static inline Digit GetNthDigit(const Data data, const size_t n);
 
 /// Performs the Super Fast Base 2 Based Radix Sort
 Data* RadixSort(Data* const array, const size_t size) {
@@ -65,7 +75,7 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
 
     // Fill the Count Array With The Correct Values (The Number of Times the Array has the number i in its place place)
     for(size_t i = 0; i < size; i++)
-        count[(array[i] >> (place * RADIX_POW)) & (RADIX - 1)]++; 
+        count[GetNthDigit(array[i], place)]++; 
             // Equivalent to array[i]/(Radix^place) % radix for radices of powers of 2, finds the place'th digit
 
     for(size_t i = 1; i < RADIX; i++) // Creating a Rolling Sum on Count
@@ -73,7 +83,7 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
 
     for(size_t i = size - 1; i != SIZE_MAX ; i--) {  // Do the Actual Sort
 
-        size_t index = (array[i] >> (place * RADIX_POW)) & (RADIX - 1); // Same as before, gets the place'th digit
+        size_t index = GetNthDigit(array[i], place); // Same as before, gets the place'th digit
         out[count[index] - 1] = array[i]; // The Number of Digits before the place'th digit minus one creates a sorting function 
         count[index]--; // decrement so that we know where to place the next number with the same digit
 
@@ -98,10 +108,17 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
  */
 size_t FindNumIterations(Data max) {
 
-    size_t i = 1;
-
-    while(max >>= RADIX_POW && i++);
-
+    size_t i;
+    for(i = 0; max; i++) // if the number if still not zero iterate again
+        max >>= RADIX_POW; // shift it the amount an iteration would do
+    
     return i;
+
+}
+
+/// Gets the "Digit" in the Nth Place, for A Base of RADIX
+inline Digit GetNthDigit(const Data data, const size_t n) {
+
+    return (data >> (n * RADIX_POW)) & (RADIX - 1); // moves the data into a bit mask and gets the value
 
 }

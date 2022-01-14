@@ -59,6 +59,13 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     strcpy(buffer + offset, "Avg.csv");
     FILE* ave = fopen(buffer, "w");
 
+    #ifdef LOG
+    strcpy(buffer + offset, ".log");
+    FILE* log = fopen(buffer, "w");
+    fprintf(log, "%s Log \n%zu Trials per Run \nAveraged Over %zu Runs\n\n", sort.name, numtrials, numtimes);
+    clock_t start = clock();
+    #endif
+
     #ifndef VLA // We have to use malloc in windows over VLAs
     SortData* besttimes = malloc(numtrials * numtimes * sizeof(SortData));  // arrays to store the sorting results
     SortData* worsttimes = malloc(numtrials * numtimes * sizeof(SortData));
@@ -79,13 +86,33 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     for(size_t i = 0; i < numtrials; i++) {
 
         for(size_t j = 0; j < numtimes; j++) {
-
+            
             GenerateWorstCase(array, trials[i]);
+            #ifdef LOG
+            fputs("Before ", log);
+            fPrintArray(log, array, trials[i]);
+            #endif
             worsttimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]);
-        
+            #ifdef LOG
+            fputs("After ", log);
+            fPrintArray(log, array, trials[i]);
+            fprintf(log, "%ld Elements in %lf Milliseconds\n", worsttimes[i + j * numtrials].n, worsttimes[i + j * numtrials].time_ms);
+            fprintf(log, "Sorted: %s\n\n", IsSorted(array, trials[i])? "True": "False");
+            #endif
+            
             GenerateAverageCase(array, trials[i]);
+            #ifdef LOG
+            fputs("Before ", log);
+            fPrintArray(log, array, trials[i]);
+            #endif
             avetimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]); // Its sorted after this
-        
+            #ifdef LOG
+            fputs("After ", log);
+            fPrintArray(log, array, trials[i]);
+            fprintf(log, "%ld Elements in %lf Milliseconds\n", avetimes[i + j * numtrials].n, avetimes[i + j * numtrials].time_ms);
+            fprintf(log, "Sorted: %s\n\n", IsSorted(array, trials[i])? "True": "False");
+            #endif
+            
             besttimes[i + j * numtrials] = TimeSort(sort.sort, array, trials[i]);
 
         }
@@ -125,6 +152,11 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
     fclose(best);
     fclose(worst);
     fclose(ave);
+
+    #ifdef LOG
+    fprintf(log, "Benchmark Finished: Took %lf Milliseconds", (clock() - start)*1000.0f/CLOCKS_PER_SEC);
+    fclose(log);
+    #endif
 
 }
 
