@@ -76,7 +76,6 @@ Data* CountingSort(Data* const array, const size_t size, const size_t place) {
     // Fill the Count Array With The Correct Values (The Number of Times the Array has the number i in its place place)
     for(size_t i = 0; i < size; i++)
         count[GetNthDigit(array[i], place)]++; 
-            // Equivalent to array[i]/(Radix^place) % radix for radices of powers of 2, finds the place'th digit
 
     for(size_t i = 1; i < RADIX; i++) // Creating a Rolling Sum on Count
         count[i] += count[i - 1]; // Every value is the number of counts before it

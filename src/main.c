@@ -56,14 +56,14 @@
  */
 int main() {
 
-    Sort sorts[] = { INSERTION_SORT, MERGE_SORT };
+    Sort sorts[] = { RADIX_SORT, MERGE_SORT, SELECTION_SORT };
     const size_t numsorts = sizeof(sorts)/sizeof(Sort);
 
     Data n[SIZE];
     for(Data i = 0; i < SIZE; i++)
         n[i] = MIN + STEP * i;
 
-    BenchmarkSorts(sorts, numsorts, n, SIZE, 5);
+    BenchmarkSorts(sorts, numsorts, n, SIZE, 10);
 
     return EXIT_SUCCESS;
 

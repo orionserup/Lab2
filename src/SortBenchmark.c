@@ -118,9 +118,6 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
         }
     }
 
-    #ifdef PARALLEL
-    #pragma omp parallel for
-    #endif
     for(size_t i = 0; i < numtrials; i++) { // Take the Average of all the times 
 
         for(size_t j = 1; j < numtimes; j++) { // sum up the elements
@@ -133,7 +130,7 @@ void BenchmarkSort(const Sort sort, const Data* const trials, const size_t numtr
 
         worsttimes[i].time_ms /= numtimes;  // divide the sum by the number of elements
         besttimes[i].time_ms /= numtimes;
-        worsttimes[i].time_ms /= numtimes;
+        avetimes[i].time_ms /= numtimes;
 
     }
 
@@ -205,8 +202,8 @@ Data* GenerateWorstCase(Data* const array, const size_t n) {
 
     Assert(array, "Invalid Array Pointer in Worst Case Test");
 
-    for(Data i = 0; i < (Data)n; i++)
-        array[i] = maxof(Data) - i; // fill the array from INT_MAX to INT_MAX - n
+    for(Data i = 0; i < n; i++)
+        array[i] = maxof(Data) - i - 200; // fill the array from INT_MAX to INT_MAX - n
 
     return array;
 
@@ -217,7 +214,7 @@ Data* GenerateAverageCase(Data* const array, const size_t n) {
 
     Assert(array, "Invalid Array Pointer in Average Case Generator");
     
-    srand(time(NULL)); // seed the random generator 
+    srand(clock()); // seed the random generator 
 
     for(Data i = 0; i < n; i++)
         array[i] = rand() & maxof(Data);  // fill the array with n random numbers

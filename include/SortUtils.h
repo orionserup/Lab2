@@ -70,7 +70,7 @@ typedef struct {
 Data Max(const Data* const array, const size_t size);
 
 /**
- * \brief 
+ * \brief Checks to see if an Array is Sorted
  * 
  * \param array: Array to Check
  * \param size: Size of the Array

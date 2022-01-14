@@ -16,11 +16,11 @@ def PlotCSVData(path, combined):
 
     if(combined == True):
         for i in range(len(xdata)):       
-            plt.plot(xdata[i], ydata[i], '-')
+            plt.plot(xdata[i], ydata[i], '-', linewidth = 2)
             plt.title("Sort Timing")
             plt.legend(titles)    
             
-        plt.savefig(path + "Sorts.png")
+        plt.savefig(path + "Sorts.png", dpi = 1200)
         plt.close()
 
     else:
